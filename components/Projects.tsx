@@ -4,7 +4,29 @@ import { PROJECTS } from '../constants';
 import { Project } from '../types';
 import FadeIn from './FadeIn';
 
-const PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=80";
+// Fallback images based on category to ensure relevant placeholders
+const getPlaceholderImage = (category: string): string => {
+  const categoryLower = category.toLowerCase();
+  
+  if (categoryLower.includes('data') || categoryLower.includes('visualization')) {
+    return "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80"; // Data/Charts
+  }
+  if (categoryLower.includes('web') || categoryLower.includes('development') || categoryLower.includes('cloud')) {
+    return "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1200&q=80"; // Coding
+  }
+  if (categoryLower.includes('3d') || categoryLower.includes('simulation') || categoryLower.includes('vr') || categoryLower.includes('virtual')) {
+    return "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=1200&q=80"; // 3D Abstract
+  }
+  if (categoryLower.includes('construction') || categoryLower.includes('bim')) {
+    return "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=80"; // Construction
+  }
+  if (categoryLower.includes('consult') || categoryLower.includes('strategy')) {
+    return "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80"; // Meeting
+  }
+  
+  // Default generic fallback
+  return "https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?auto=format&fit=crop&w=1200&q=80";
+};
 
 const Projects: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -31,7 +53,11 @@ const Projects: React.FC = () => {
 
   const getProjectImages = (project: Project | null) => {
     if (!project) return [];
-    return (project.images && project.images.length > 0) ? project.images : [PLACEHOLDER_IMAGE];
+    // Use images if available, otherwise get a category-specific placeholder
+    if (project.images && project.images.length > 0) {
+      return project.images;
+    }
+    return [getPlaceholderImage(project.category)];
   };
 
   const currentImages = getProjectImages(selectedProject);
@@ -44,6 +70,13 @@ const Projects: React.FC = () => {
   const prevImage = () => {
     if (currentImages.length <= 1) return;
     setCurrentImageIndex((prev) => (prev - 1 + currentImages.length) % currentImages.length);
+  };
+
+  const handleCardKeyDown = (e: React.KeyboardEvent, project: Project) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setSelectedProject(project);
+    }
   };
 
   return (
@@ -67,19 +100,26 @@ const Projects: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
         {PROJECTS.map((project, index) => {
-          const coverImage = project.images?.[0] || PLACEHOLDER_IMAGE;
+          // Robust image selection for the grid card
+          const hasImages = project.images && project.images.length > 0;
+          const coverImage = hasImages ? project.images![0] : getPlaceholderImage(project.category);
 
           return (
             <FadeIn key={index} delay={index * 100}>
               <div 
-                className="group cursor-pointer"
+                className="group cursor-pointer focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:focus:ring-offset-black rounded-sm"
                 onClick={() => setSelectedProject(project)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => handleCardKeyDown(e, project)}
+                aria-label={`View project details for ${project.title}`}
               >
                 <div className="aspect-[4/3] overflow-hidden bg-zinc-100 dark:bg-zinc-800 mb-4 relative">
                   <img 
                     src={coverImage} 
                     alt={project.title}
                     className="w-full h-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-110"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out-expo flex items-center justify-center">
                       <span className="bg-white text-black px-4 py-2 text-xs font-bold uppercase tracking-wider transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out-expo">View Project</span>
@@ -105,28 +145,52 @@ const Projects: React.FC = () => {
 
       {/* Modal */}
       {selectedProject && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-0 md:p-4 backdrop-blur-sm bg-black/40 animate-fade-in">
+        <div 
+          className="fixed inset-0 z-[60] flex items-center justify-center p-0 md:p-4 backdrop-blur-sm bg-black/40 animate-fade-in"
+          role="presentation"
+        >
           <div 
             ref={modalRef} 
             className="w-full h-full md:h-auto md:max-w-5xl md:max-h-[90vh] bg-white dark:bg-zinc-950 shadow-2xl outline-none overflow-y-auto flex flex-col md:flex-row transform transition-all duration-500 ease-out-expo"
             tabIndex={-1}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
           >
              {/* Close Button Mobile - Floating */}
              <button 
                 onClick={() => setSelectedProject(null)} 
                 className="absolute top-4 right-4 z-50 p-2 bg-black/50 text-white rounded-full md:hidden backdrop-blur-md"
+                aria-label="Close modal"
              >
                 <X className="w-5 h-5" />
              </button>
 
              {/* Image Section */}
              <div className="w-full md:w-2/3 bg-zinc-100 dark:bg-zinc-900 relative min-h-[300px] md:min-h-auto flex items-center justify-center group flex-shrink-0">
-                <img src={currentImages[currentImageIndex]} className="w-full h-full md:max-w-full md:max-h-[80vh] object-cover md:object-contain" alt={selectedProject.title} />
+                <img 
+                  src={currentImages[currentImageIndex]} 
+                  className="w-full h-full md:max-w-full md:max-h-[80vh] object-cover md:object-contain" 
+                  alt={`Project ${selectedProject.title} image ${currentImageIndex + 1}`} 
+                />
                 
                 {currentImages.length > 1 && (
                   <>
-                    <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm"><ChevronLeft /></button>
-                    <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm"><ChevronRight /></button>
+                    <button 
+                      onClick={prevImage} 
+                      className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm"
+                      aria-label="Previous image"
+                    >
+                      <ChevronLeft />
+                    </button>
+                    <button 
+                      onClick={nextImage} 
+                      className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm"
+                      aria-label="Next image"
+                    >
+                      <ChevronRight />
+                    </button>
                   </>
                 )}
              </div>
@@ -134,10 +198,14 @@ const Projects: React.FC = () => {
              {/* Content Section */}
              <div className="w-full md:w-1/3 p-6 md:p-10 flex flex-col bg-white dark:bg-zinc-950">
                 <div className="flex justify-between items-start mb-6">
-                   <h2 className="text-2xl font-serif font-bold text-zinc-900 dark:text-white pr-8 md:pr-0">
+                   <h2 id="modal-title" className="text-2xl font-serif font-bold text-zinc-900 dark:text-white pr-8 md:pr-0">
                      {selectedProject.title}
                    </h2>
-                   <button onClick={() => setSelectedProject(null)} className="hidden md:block text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors duration-200">
+                   <button 
+                     onClick={() => setSelectedProject(null)} 
+                     className="hidden md:block text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors duration-200"
+                     aria-label="Close modal"
+                   >
                      <X />
                    </button>
                 </div>
@@ -145,7 +213,7 @@ const Projects: React.FC = () => {
                 <div className="space-y-6 flex-grow">
                    <div>
                       <h5 className="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2">About</h5>
-                      <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                      <p id="modal-description" className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
                         {selectedProject.description}
                       </p>
                    </div>
@@ -164,12 +232,24 @@ const Projects: React.FC = () => {
                    {selectedProject.links.demo || selectedProject.links.code ? (
                       <div className="pt-4 flex gap-4 mt-auto">
                          {selectedProject.links.demo && (
-                           <a href={selectedProject.links.demo} target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-sky-600 hover:underline flex items-center group">
+                           <a 
+                             href={selectedProject.links.demo} 
+                             target="_blank" 
+                             rel="noopener noreferrer" 
+                             className="text-sm font-bold text-sky-600 hover:underline flex items-center group"
+                             aria-label={`View live demo for ${selectedProject.title}`}
+                           >
                              Live Demo <ExternalLink className="w-3 h-3 ml-1 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                            </a>
                          )}
                          {selectedProject.links.code && (
-                           <a href={selectedProject.links.code} target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-zinc-900 dark:text-white hover:underline flex items-center group">
+                           <a 
+                             href={selectedProject.links.code} 
+                             target="_blank" 
+                             rel="noopener noreferrer" 
+                             className="text-sm font-bold text-zinc-900 dark:text-white hover:underline flex items-center group"
+                             aria-label={`View source code for ${selectedProject.title}`}
+                           >
                              Source Code <Github className="w-3 h-3 ml-1 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                            </a>
                          )}

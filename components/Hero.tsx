@@ -1,13 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { MapPin, ArrowRight } from 'lucide-react';
 import { PROFILE } from '../constants';
 
 const Hero: React.FC = () => {
   const [isMounted, setIsMounted] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const imageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!imageRef.current) return;
+    const rect = imageRef.current.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+    setIsHovering(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+  };
 
   return (
     <section id="home" className="min-h-[90vh] flex items-center justify-center pt-24 pb-12 scroll-mt-28 overflow-hidden" aria-label="Introduction">
@@ -56,19 +73,42 @@ const Hero: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Column: Clean Image */}
+        {/* Right Column: Interactive Image */}
         <div className="order-1 md:order-2 relative px-4 md:px-0">
-          <div className={`relative aspect-[3/4] md:aspect-[4/5] overflow-hidden rounded-sm bg-zinc-100 dark:bg-zinc-900 transition-all duration-1000 ease-out-expo delay-300 ${isMounted ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+          <div 
+            ref={imageRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            className={`relative aspect-[3/4] md:aspect-[4/5] overflow-hidden rounded-sm bg-zinc-100 dark:bg-zinc-900 transition-all duration-1000 ease-out-expo delay-300 group cursor-crosshair ${isMounted ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+          >
+            {/* Grayscale Base Layer */}
             <img 
               src={PROFILE.image} 
               alt={PROFILE.name} 
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-out-expo scale-110 hover:scale-105"
+              className="absolute inset-0 w-full h-full object-cover grayscale transition-transform duration-700 ease-out-expo scale-105 group-hover:scale-110"
             />
-            {/* Minimal overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
+            
+            {/* Color Spotlight Layer */}
+            <div 
+              className="absolute inset-0 pointer-events-none transition-opacity duration-300 ease-out"
+              style={{
+                opacity: isHovering ? 1 : 0,
+                maskImage: `radial-gradient(circle 120px at ${mousePos.x}px ${mousePos.y}px, black 25%, transparent 100%)`,
+                WebkitMaskImage: `radial-gradient(circle 120px at ${mousePos.x}px ${mousePos.y}px, black 25%, transparent 100%)`,
+              }}
+            >
+               <img 
+                src={PROFILE.image} 
+                alt="" 
+                className="w-full h-full object-cover transition-transform duration-700 ease-out-expo scale-105 group-hover:scale-110"
+              />
+            </div>
+
+            {/* Subtle Overlay Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
           </div>
           
-          {/* Decorative minimalist element */}
+          {/* Decorative minimalist elements */}
           <div className={`absolute -bottom-6 -left-6 w-24 h-24 bg-zinc-100 dark:bg-zinc-800 -z-10 hidden md:block transition-all duration-1000 ease-out-expo delay-700 ${isMounted ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 translate-x-4 translate-y-4'}`}></div>
           <div className={`absolute -top-6 -right-6 w-24 h-24 border border-zinc-200 dark:border-zinc-800 -z-10 hidden md:block transition-all duration-1000 ease-out-expo delay-700 ${isMounted ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 -translate-x-4 -translate-y-4'}`}></div>
         </div>

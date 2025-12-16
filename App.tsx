@@ -6,6 +6,7 @@ import Projects from './components/Projects';
 import Skills from './components/Skills';
 import Footer from './components/Footer';
 import LiquidBackground from './components/LiquidBackground';
+import CustomCursor from './components/CustomCursor';
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -50,6 +51,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen text-zinc-900 dark:text-zinc-200 relative transition-colors duration-300">
+      <CustomCursor />
       <LiquidBackground />
       <Navigation />
       
