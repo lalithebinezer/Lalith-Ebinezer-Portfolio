@@ -4,19 +4,16 @@ import { Menu, X, Sun, Moon } from 'lucide-react';
 const Navigation: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
-    // Scroll listener
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
 
-    // Initial theme check
     const savedTheme = localStorage.getItem('theme');
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    const initialTheme = savedTheme || 'dark'; // Default to dark for consistency with original design
+    const initialTheme = savedTheme || 'light';
     
     setTheme(initialTheme);
     if (initialTheme === 'dark') {
@@ -27,6 +24,18 @@ const Navigation: React.FC = () => {
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
@@ -47,14 +56,13 @@ const Navigation: React.FC = () => {
     { name: 'Skills', href: '#skills' },
   ];
 
-  // Manual scroll handler
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const targetId = href.replace('#', '');
     const element = document.getElementById(targetId);
     
     if (element) {
-      const headerOffset = 100; // Increased offset for floating nav
+      const headerOffset = 100;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
@@ -69,109 +77,106 @@ const Navigation: React.FC = () => {
 
   return (
     <>
-      {/* Floating Island Navigation */}
       <nav 
-        className={`fixed z-50 transition-all duration-500 ease-in-out print:hidden 
-          left-1/2 -translate-x-1/2 
-          ${isScrolled ? 'top-4 w-[90%] max-w-4xl' : 'top-6 w-[95%] max-w-6xl'}
-          rounded-full border border-zinc-200/50 dark:border-white/10 
-          bg-white/80 dark:bg-zinc-900/60 backdrop-blur-xl shadow-lg shadow-zinc-200/20 dark:shadow-black/20
+        className={`fixed z-50 top-0 left-0 right-0 w-full transition-all duration-300 ease-in-out print:hidden
+          ${isScrolled ? 'bg-zinc-50/90 dark:bg-zinc-950/90 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800 py-4' : 'bg-transparent py-6'}
         `}
         role="navigation"
         aria-label="Main navigation"
       >
-        <div className="px-4 md:px-6 py-3 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
           
           {/* Logo */}
           <a 
             href="#home" 
-            className="text-lg font-bold text-zinc-900 dark:text-white tracking-tight cursor-pointer pl-2"
+            className="text-xl font-bold font-serif text-zinc-900 dark:text-zinc-50 tracking-tight cursor-pointer z-50"
             onClick={(e) => handleNavClick(e, '#home')}
-            aria-label="Lalith Ebinezer Portfolio Home"
           >
-            LalithEbinezer<span className="text-sky-500">.</span>
+            Lalith Ebinezer<span className="text-sky-600">.</span>
           </a>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1">
-            <div className="flex items-center gap-1 pr-4 border-r border-zinc-200 dark:border-white/10 mr-4">
-              {navLinks.map((link) => (
-                <a 
-                  key={link.name} 
-                  href={link.href}
-                  className="px-4 py-1.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-sky-600 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-white/5 rounded-full transition-all cursor-pointer"
-                  onClick={(e) => handleNavClick(e, link.href)}
-                >
-                  {link.name}
-                </a>
-              ))}
-            </div>
-            
-            {/* Theme Toggle Button */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <a 
+                key={link.name} 
+                href={link.href}
+                className="text-sm font-medium text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors relative group"
+                onClick={(e) => handleNavClick(e, link.href)}
+              >
+                {link.name}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-sky-600 transition-all group-hover:w-full"></span>
+              </a>
+            ))}
+
+            <div className="w-px h-4 bg-zinc-300 dark:bg-zinc-700 mx-2"></div>
+
             <button 
               onClick={toggleTheme}
-              className="p-2 rounded-full text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-white/10 transition-colors mr-2"
-              aria-label={theme === 'dark' ? "Switch to light mode" : "Switch to dark mode"}
+              className="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors"
+              aria-label="Toggle theme"
             >
-              {theme === 'dark' ? <Sun className="w-5 h-5" aria-hidden="true" /> : <Moon className="w-5 h-5" aria-hidden="true" />}
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
 
             <a 
               href="mailto:lalithebinezer26@gmail.com"
-              className="px-5 py-2 text-sm font-medium text-white bg-zinc-900 dark:bg-white dark:text-zinc-900 rounded-full hover:scale-105 transition-transform"
-              aria-label="Send email to hire me"
+              className="ml-2 text-sm font-bold text-zinc-900 dark:text-white border-b-2 border-zinc-900 dark:border-white hover:border-sky-600 dark:hover:border-sky-500 hover:text-sky-600 dark:hover:text-sky-500 transition-all pb-0.5"
             >
               Hire Me
             </a>
           </div>
 
           {/* Mobile Menu Controls */}
-          <div className="flex items-center md:hidden gap-3">
-            <button 
+          <div className="flex items-center md:hidden gap-4">
+             <button 
               onClick={toggleTheme}
-              className="p-2 rounded-full text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-white/10 transition-colors"
+              className="text-zinc-500"
             >
-              {theme === 'dark' ? <Sun className="w-5 h-5" aria-hidden="true" /> : <Moon className="w-5 h-5" aria-hidden="true" />}
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-
             <button 
-              className="p-2 text-zinc-900 dark:text-zinc-200 transition-transform duration-300"
+              className="text-zinc-900 dark:text-white z-50 relative"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-              style={{ transform: isMobileMenuOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}
             >
-              {isMobileMenuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+              {isMobileMenuOpen ? <X /> : <Menu />}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu Dropdown (Detached from floating nav for better layout) */}
+      {/* Mobile Menu Overlay */}
       <div 
-        className={`fixed inset-0 z-40 md:hidden bg-zinc-50/95 dark:bg-zinc-950/95 backdrop-blur-xl transition-all duration-500 flex flex-col justify-center items-center ${
-          isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
+        className={`fixed inset-0 z-40 md:hidden bg-zinc-50 dark:bg-zinc-950 transition-all duration-500 ease-in-out ${
+          isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
       >
-        <div className="space-y-6 text-center">
+        <div className="flex flex-col justify-center items-center h-full w-full px-8 space-y-8">
            {navLinks.map((link, index) => (
             <a 
               key={link.name} 
               href={link.href}
-              className={`block text-2xl font-semibold text-zinc-800 dark:text-zinc-200 hover:text-sky-500 transition-all duration-300 transform ${
-                isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+              className={`text-3xl font-serif font-bold text-zinc-900 dark:text-white hover:text-sky-600 transition-all duration-500 transform ${
+                 isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
               }`}
-              style={{ transitionDelay: `${index * 100}ms` }}
+              style={{ transitionDelay: `${100 + index * 100}ms` }}
               onClick={(e) => handleNavClick(e, link.href)}
             >
               {link.name}
             </a>
           ))}
-          <div className={`pt-8 transition-all duration-500 delay-300 ${isMobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          
+          <div 
+            className={`pt-8 transition-all duration-500 transform ${
+               isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+            }`}
+            style={{ transitionDelay: '500ms' }}
+          >
              <a 
               href="mailto:lalithebinezer26@gmail.com"
-              className="inline-block px-8 py-3 text-lg font-medium text-white bg-sky-600 rounded-full hover:bg-sky-500 transition-colors shadow-lg shadow-sky-500/30"
+              className="px-8 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold rounded-full"
             >
-              Hire Me
+              Let's Talk
             </a>
           </div>
         </div>

@@ -1,134 +1,76 @@
-import React, { useState, useRef } from 'react';
-import { MapPin, Mail, Linkedin, Phone } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { MapPin, ArrowRight } from 'lucide-react';
 import { PROFILE } from '../constants';
 
 const Hero: React.FC = () => {
-  const [rotation, setRotation] = useState({ x: 0, y: 0 });
-  const [scale, setScale] = useState(1);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
-    
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    // Calculate rotation (max 7 degrees for subtle effect)
-    const rotateX = ((y - centerY) / centerY) * -7; 
-    const rotateY = ((x - centerX) / centerX) * 7;
-
-    setRotation({ x: rotateX, y: rotateY });
-  };
-
-  const handleMouseEnter = () => {
-    setScale(1.05);
-  };
-
-  const handleMouseLeave = () => {
-    setRotation({ x: 0, y: 0 });
-    setScale(1);
-  };
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
-    <section id="home" className="min-h-[calc(100vh-4rem)] flex items-center justify-center pt-20 pb-10 md:pt-24 md:pb-12" aria-label="Introduction">
-      {/* PRINT LAYOUT HEADER - Visible only when printing */}
-      <div className="hidden print:block w-full text-left mb-8 border-b-2 border-slate-800 pb-8">
-        <h1 className="text-4xl font-bold text-black mb-2">{PROFILE.name}</h1>
-        <h2 className="text-xl text-slate-700 mb-4">{PROFILE.title}</h2>
-        <div className="flex flex-wrap gap-4 text-sm text-slate-600">
-           <span className="flex items-center"><Mail className="w-4 h-4 mr-1" aria-hidden="true" /> {PROFILE.contact.email}</span>
-           <span className="flex items-center"><Phone className="w-4 h-4 mr-1" aria-hidden="true" /> {PROFILE.contact.phone}</span>
-           <span className="flex items-center"><MapPin className="w-4 h-4 mr-1" aria-hidden="true" /> {PROFILE.location}</span>
-           <span className="flex items-center"><Linkedin className="w-4 h-4 mr-1" aria-hidden="true" /> {PROFILE.contact.linkedin}</span>
-        </div>
-      </div>
-
-      {/* WEB LAYOUT - Standard Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center print:block">
+    <section id="home" className="min-h-[90vh] flex items-center justify-center pt-24 pb-12 scroll-mt-28 overflow-hidden" aria-label="Introduction">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-center w-full">
         
-        {/* Left Column: Text Content */}
-        <div className="space-y-6 md:space-y-8 order-2 md:order-1">
-          <div className="space-y-4">
-            <div className="print:hidden inline-flex items-center px-3 py-1 rounded-full border border-sky-500/30 bg-sky-500/10 text-sky-600 dark:text-sky-400 text-xs sm:text-sm font-medium">
-              <span className="relative flex h-2 w-2 mr-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
-              </span>
-              Available for Consulting
+        {/* Left Column: Typography */}
+        <div className="space-y-8 md:space-y-10 order-2 md:order-1">
+          <div>
+            <div className={`transition-all duration-1000 ease-out-expo delay-100 ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+              <p className="text-zinc-500 dark:text-zinc-400 font-medium mb-4 tracking-wide uppercase text-xs md:text-sm">
+                Digital Twin Consultant
+              </p>
             </div>
             
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white print:hidden">
-              Hi, I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-indigo-600 dark:from-sky-400 dark:to-indigo-500 block sm:inline">{PROFILE.name}</span>
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-serif font-bold tracking-tighter text-zinc-900 dark:text-white leading-[0.9] break-words">
+              <div className="overflow-hidden">
+                 <span className={`block transition-transform duration-1000 ease-out-expo delay-200 ${isMounted ? 'translate-y-0' : 'translate-y-full'}`}>
+                   {PROFILE.name.split(' ')[0]}
+                 </span>
+              </div>
+              <div className="overflow-hidden">
+                <span className={`block transition-transform duration-1000 ease-out-expo delay-300 ${isMounted ? 'translate-y-0' : 'translate-y-full'}`}>
+                  <span className="text-zinc-400 dark:text-zinc-600">{PROFILE.name.split(' ')[1]}</span><span className="text-sky-600">.</span>
+                </span>
+              </div>
             </h1>
-            
-            <h2 className="text-xl sm:text-2xl md:text-3xl text-slate-600 dark:text-slate-400 font-light tracking-tight print:hidden">
-              {PROFILE.title}
-            </h2>
-            
-            <div className="flex items-center text-slate-600 dark:text-slate-400 text-sm md:text-base print:hidden">
-              <MapPin className="w-4 h-4 mr-2 text-sky-500" aria-hidden="true" />
-              {PROFILE.location}
-            </div>
           </div>
 
-          <div className="prose prose-invert max-w-lg text-slate-700 dark:text-slate-300 text-base sm:text-lg leading-relaxed print:text-black print:max-w-full">
-            <p>{PROFILE.summary[0]}</p>
-            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-4 print:text-slate-600">{PROFILE.summary[1]}</p>
+          <div className={`max-w-md transition-all duration-1000 ease-out-expo delay-500 ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <p className="text-zinc-600 dark:text-zinc-400 text-base md:text-lg leading-relaxed">
+              {PROFILE.summary[0]} Specialize in <span className="text-zinc-900 dark:text-white font-semibold">Autodesk Platform Services</span> and BIM implementation strategies.
+            </p>
           </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 pt-4 print:hidden">
-            <a 
-              href={`mailto:${PROFILE.contact.email}`}
-              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-medium transition-all hover:scale-105 active:scale-95 shadow-lg shadow-sky-500/20"
-              aria-label="Send an email to contact me"
-            >
-              <Mail className="w-5 h-5 mr-2" aria-hidden="true" />
-              Contact Me
-            </a>
-            <a 
-              href={`https://www.${PROFILE.contact.linkedin}`} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-medium transition-all hover:border-slate-400 dark:hover:border-slate-500 backdrop-blur-sm"
-              aria-label="Visit my LinkedIn profile (opens in a new tab)"
-            >
-              <Linkedin className="w-5 h-5 mr-2" aria-hidden="true" />
-              LinkedIn
-            </a>
+          
+          <div className={`flex flex-wrap gap-6 pt-2 transition-all duration-1000 ease-out-expo delay-700 ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+             <div className="flex items-center text-sm font-medium text-zinc-500">
+               <MapPin className="w-4 h-4 mr-2" />
+               {PROFILE.location}
+             </div>
+             <a 
+               href="#projects" 
+               className="group flex items-center text-sm font-bold text-zinc-900 dark:text-white border-b border-zinc-900 dark:border-white pb-1 hover:text-sky-600 hover:border-sky-600 transition-all"
+             >
+               View Selected Works <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-300 ease-out-expo group-hover:translate-x-1" />
+             </a>
           </div>
         </div>
 
-        {/* Right Column: Image with 3D Tilt Effect */}
-        <div className="order-1 md:order-2 flex justify-center md:justify-end print:hidden" style={{ perspective: '1000px' }}>
-          <div 
-            ref={containerRef}
-            onMouseMove={handleMouseMove}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            className="relative group cursor-pointer w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-[26rem]"
-            style={{
-              transform: `perspective(1000px) rotateX(${rotation.x}deg) rotateY(${rotation.y}deg) scale3d(${scale}, ${scale}, ${scale})`,
-              transition: scale === 1 ? 'transform 0.5s ease-in-out' : 'transform 0.1s ease-out'
-            }}
-            role="img"
-            aria-label={`Profile picture of ${PROFILE.name}`}
-          >
-            {/* Glow/Border Effect */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-sky-500 to-indigo-600 rounded-[2rem] blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
-            
-            <div className="relative overflow-hidden rounded-[2rem] border-2 border-slate-200 dark:border-slate-800 shadow-2xl h-full w-full">
-              <img 
-                src={PROFILE.image} 
-                alt={PROFILE.name} 
-                className="w-full h-full object-cover"
-              />
-              {/* Shine Effect */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-            </div>
+        {/* Right Column: Clean Image */}
+        <div className="order-1 md:order-2 relative px-4 md:px-0">
+          <div className={`relative aspect-[3/4] md:aspect-[4/5] overflow-hidden rounded-sm bg-zinc-100 dark:bg-zinc-900 transition-all duration-1000 ease-out-expo delay-300 ${isMounted ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+            <img 
+              src={PROFILE.image} 
+              alt={PROFILE.name} 
+              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-out-expo scale-110 hover:scale-105"
+            />
+            {/* Minimal overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
           </div>
+          
+          {/* Decorative minimalist element */}
+          <div className={`absolute -bottom-6 -left-6 w-24 h-24 bg-zinc-100 dark:bg-zinc-800 -z-10 hidden md:block transition-all duration-1000 ease-out-expo delay-700 ${isMounted ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 translate-x-4 translate-y-4'}`}></div>
+          <div className={`absolute -top-6 -right-6 w-24 h-24 border border-zinc-200 dark:border-zinc-800 -z-10 hidden md:block transition-all duration-1000 ease-out-expo delay-700 ${isMounted ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 -translate-x-4 -translate-y-4'}`}></div>
         </div>
 
       </div>

@@ -1,9 +1,14 @@
+
+export interface JobRole {
+  title: string;
+  period: string;
+  description: string[];
+}
+
 export interface Job {
   company: string;
-  role: string;
-  period: string;
   location: string;
-  description: string[];
+  roles: JobRole[];
 }
 
 export interface Education {

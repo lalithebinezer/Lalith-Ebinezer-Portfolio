@@ -1,53 +1,66 @@
 import React from 'react';
-import { Briefcase, Calendar, MapPin } from 'lucide-react';
 import { EXPERIENCE } from '../constants';
+import FadeIn from './FadeIn';
 
 const Experience: React.FC = () => {
   return (
-    <section id="experience" className="py-12 md:py-20 print:py-0">
-      <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-10 md:mb-16 flex items-center print:text-black print:mb-6">
-        <span className="bg-gradient-to-r from-sky-400 to-indigo-500 w-8 md:w-12 h-1 mr-4 rounded-full print:hidden"></span>
-        Professional Experience
-      </h3>
+    <section id="experience" className="py-20 border-t border-zinc-200 dark:border-zinc-900 scroll-mt-28">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div className="md:col-span-1">
+          <FadeIn>
+            <h3 className="text-3xl font-serif font-bold text-zinc-900 dark:text-white sticky top-32">
+              Experience
+            </h3>
+          </FadeIn>
+        </div>
 
-      <div className="relative border-l-2 border-slate-200 dark:border-slate-800/50 ml-3 md:ml-6 space-y-12 md:space-y-16 print:border-none print:ml-0 print:space-y-8">
-        {/* Gradient Line for Timeline (Web only) */}
-        <div className="absolute top-0 bottom-0 -left-[2px] w-[2px] bg-gradient-to-b from-sky-500 via-indigo-500 to-slate-200 dark:to-slate-900 print:hidden"></div>
+        <div className="md:col-span-3 space-y-20">
+          {EXPERIENCE.map((job, index) => (
+            <FadeIn key={index} delay={index * 100}>
+              <div className="group grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                {/* Left: Company & Location */}
+                <div className="md:col-span-1">
+                  <div className="md:sticky md:top-40">
+                    <h4 className="text-lg font-bold text-zinc-900 dark:text-white mb-1">
+                      {job.company}
+                    </h4>
+                    <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400 block">
+                      {job.location}
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Right: Roles Timeline */}
+                {/* ml-6 on mobile ensures the -left-[41px] dots don't get cut off by screen edge */}
+                <div className="md:col-span-2 space-y-12 relative border-l-2 border-zinc-200 dark:border-zinc-800 pl-8 ml-6 md:ml-0">
+                  {job.roles.map((role, rIndex) => (
+                    <div key={rIndex} className="relative">
+                      {/* Timeline Dot */}
+                      <div className={`absolute -left-[41px] top-1.5 w-5 h-5 rounded-full border-4 border-zinc-50 dark:border-zinc-950 bg-zinc-300 dark:bg-zinc-700 group-hover:border-zinc-100 dark:group-hover:border-zinc-900 transition-colors duration-300 ${rIndex === 0 ? 'bg-sky-600 dark:bg-sky-500' : ''}`}></div>
+                      
+                      <h5 className="text-xl font-serif font-bold text-zinc-800 dark:text-zinc-100 mb-1 group-hover:text-sky-600 transition-colors duration-300">
+                        {role.title}
+                      </h5>
+                      <div className="text-xs font-mono text-zinc-400 dark:text-zinc-500 mb-4 uppercase tracking-wide">
+                        {role.period}
+                      </div>
+                      
+                      <ul className="space-y-2">
+                        {role.description.map((point, idx) => (
+                          <li key={idx} className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">
+                            {point}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
 
-        {EXPERIENCE.map((job, index) => (
-          <div key={index} className="relative pl-6 sm:pl-8 md:pl-12 group print:pl-0">
-            {/* Timeline Dot (Web only) */}
-            <div className="absolute -left-[9px] top-2 h-4 w-4 rounded-full border-2 border-white dark:border-slate-900 bg-slate-400 dark:bg-slate-600 group-hover:bg-sky-500 group-hover:scale-125 transition-all duration-300 shadow-[0_0_10px_rgba(14,165,233,0.3)] print:hidden" />
-            
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 sm:mb-4 print:mb-1">
-              <div>
-                <h4 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-100 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors print:text-black print:text-lg">
-                  {job.role}
-                </h4>
-                <div className="text-sky-600 dark:text-sky-500 font-medium text-base sm:text-lg mt-1 print:text-slate-800 print:font-semibold">{job.company}</div>
               </div>
-              <div className="flex flex-col sm:items-end mt-2 sm:mt-0 text-xs sm:text-sm text-slate-500 dark:text-slate-500 space-y-1 print:text-slate-600 print:flex-row print:gap-4 print:mt-0">
-                <span className="flex items-center">
-                  <Calendar className="w-3.5 h-3.5 mr-1.5 print:hidden" />
-                  {job.period}
-                </span>
-                <span className="flex items-center print:hidden">
-                  <MapPin className="w-3.5 h-3.5 mr-1.5" />
-                  {job.location}
-                </span>
-              </div>
-            </div>
-
-            <ul className="mt-3 sm:mt-4 space-y-2 sm:space-y-3 print:space-y-1 print:mt-2">
-              {job.description.map((point, idx) => (
-                <li key={idx} className="flex items-start text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed print:text-black print:text-sm">
-                  <span className="mt-2.5 mr-3 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-sky-500/50 group-hover:bg-sky-500 dark:group-hover:bg-sky-400 transition-colors print:hidden"></span>
-                  <span className="print:list-disc print:ml-4">{point}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+            </FadeIn>
+          ))}
+        </div>
       </div>
     </section>
   );

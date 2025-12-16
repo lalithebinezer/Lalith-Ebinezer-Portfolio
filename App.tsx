@@ -12,7 +12,6 @@ const App: React.FC = () => {
     // Security: Disable Right Click
     const handleContextMenu = (e: MouseEvent) => {
       e.preventDefault();
-      return false;
     };
 
     // Security: Disable Developer Tools Shortcuts and View Source
@@ -36,7 +35,6 @@ const App: React.FC = () => {
     // Security: Disable Image Dragging
     const handleDragStart = (e: DragEvent) => {
       e.preventDefault();
-      return false;
     };
 
     document.addEventListener('contextmenu', handleContextMenu);
@@ -51,7 +49,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen text-slate-900 dark:text-slate-200 selection:bg-sky-200 dark:selection:bg-slate-700 relative transition-colors duration-300">
+    <div className="min-h-screen text-zinc-900 dark:text-zinc-200 relative transition-colors duration-300">
       <LiquidBackground />
       <Navigation />
       
