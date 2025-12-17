@@ -1,7 +1,7 @@
 import React from 'react';
 import { EXPERIENCE } from '../constants';
 import FadeIn from './FadeIn';
-import { Briefcase, Building2, GraduationCap } from 'lucide-react';
+import { Briefcase, Building2, GraduationCap, Award } from 'lucide-react';
 
 const Experience: React.FC = () => {
   return (
@@ -22,6 +22,19 @@ const Experience: React.FC = () => {
               {/* Metrics Stack */}
               <div className="grid grid-cols-2 md:grid-cols-1 gap-4">
                   
+                  {/* Years Experience */}
+                  <div className="p-5 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 relative overflow-hidden group hover:border-sky-500/30 transition-all col-span-2 md:col-span-1">
+                    <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <Award className="w-24 h-24 text-zinc-900 dark:text-white" />
+                    </div>
+                    <span className="block text-3xl md:text-4xl font-serif font-bold text-zinc-900 dark:text-white mb-1">
+                      10+
+                    </span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                      Years <br/>Experience
+                    </span>
+                  </div>
+
                   {/* Companies Supported */}
                   <div className="p-5 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 relative overflow-hidden group hover:border-sky-500/30 transition-all">
                     <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
