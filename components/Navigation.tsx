@@ -105,12 +105,12 @@ const Navigation: React.FC = () => {
         role="navigation"
         aria-label="Main navigation"
       >
-        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 flex items-center justify-between">
           
           {/* Logo */}
           <a 
             href="#home" 
-            className="text-xl font-bold font-serif text-zinc-900 dark:text-zinc-50 tracking-tight cursor-pointer z-50 relative"
+            className="text-xl font-bold font-serif text-zinc-900 dark:text-zinc-50 tracking-tight cursor-pointer z-50 relative truncate max-w-[70%]"
             onClick={(e) => handleNavClick(e, '#home')}
           >
             Lalith Ebinezer<span className="text-sky-600">.</span>
@@ -199,7 +199,7 @@ const Navigation: React.FC = () => {
           isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
         }`}
       >
-        <div className="flex flex-col h-full w-full px-6 pt-24 pb-8 relative overflow-y-auto">
+        <div className="flex flex-col h-[100dvh] w-full px-4 pt-24 pb-8 relative overflow-y-auto">
            {/* Navigation Links */}
            <div className="flex-grow flex flex-col justify-center space-y-8">
              {navLinks.map((link, index) => (

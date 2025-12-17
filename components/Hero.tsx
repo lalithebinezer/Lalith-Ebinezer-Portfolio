@@ -1,13 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { MapPin, ArrowRight, Linkedin, Mouse } from 'lucide-react';
 import { PROFILE } from '../constants';
 
 const Hero: React.FC = () => {
   const [isMounted, setIsMounted] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const imageContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!imageContainerRef.current) return;
+    
+    const { left, top, width, height } = imageContainerRef.current.getBoundingClientRect();
+    const x = (e.clientX - left) / width;
+    const y = (e.clientY - top) / height;
+    
+    // Calculate rotation: range from -10 to 10 degrees
+    const rotateX = (0.5 - y) * 20; 
+    const rotateY = (x - 0.5) * 20;
+    
+    setTilt({ x: rotateX, y: rotateY });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
 
   return (
     <section id="home" className="min-h-[85vh] flex flex-col justify-center pt-32 pb-12 md:pt-40 md:pb-20 scroll-mt-28 overflow-hidden relative" aria-label="Introduction">
@@ -67,16 +87,38 @@ const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Static Image */}
+          {/* Right Column: Interactive 3D Image */}
           <div className="order-1 md:order-2 relative px-2 sm:px-0">
             <div 
-              className={`relative aspect-[3/4] md:aspect-[4/5] overflow-hidden rounded-2xl bg-zinc-100 dark:bg-zinc-900 transition-all duration-1000 ease-out-expo delay-300 ${isMounted ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+              className={`relative aspect-[3/4] md:aspect-[4/5] transition-all duration-1000 ease-out-expo delay-300 ${isMounted ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+              style={{ perspective: '1000px' }}
             >
-              <img 
-                src={PROFILE.image} 
-                alt={PROFILE.name} 
-                className="w-full h-full object-cover object-center"
-              />
+              <div 
+                 ref={imageContainerRef}
+                 onMouseMove={handleMouseMove}
+                 onMouseLeave={handleMouseLeave}
+                 className="w-full h-full rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 shadow-2xl relative cursor-pointer"
+                 style={{
+                    transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale3d(1, 1, 1)`,
+                    transition: 'transform 0.1s ease-out',
+                    transformStyle: 'preserve-3d'
+                 }}
+              >
+                  <img 
+                    src={PROFILE.image} 
+                    alt={PROFILE.name} 
+                    className="w-full h-full object-cover object-center pointer-events-none"
+                  />
+                  
+                  {/* Dynamic Glare Effect */}
+                  <div 
+                    className="absolute inset-0 pointer-events-none mix-blend-overlay transition-opacity duration-200"
+                    style={{
+                       background: `linear-gradient(${135 + tilt.y * 2}deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%)`,
+                       opacity: Math.abs(tilt.x) + Math.abs(tilt.y) > 0 ? 0.3 : 0
+                    }}
+                  />
+              </div>
             </div>
             
             {/* Decorative minimalist elements */}
