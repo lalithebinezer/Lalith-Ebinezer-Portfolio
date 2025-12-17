@@ -1,7 +1,7 @@
 import React from 'react';
 import { EXPERIENCE } from '../constants';
 import FadeIn from './FadeIn';
-import { Briefcase, Users } from 'lucide-react';
+import { Briefcase, Building2, GraduationCap } from 'lucide-react';
 
 const Experience: React.FC = () => {
   return (
@@ -19,21 +19,40 @@ const Experience: React.FC = () => {
                 </h3>
               </div>
               
-              {/* Highlight Metric */}
-              <div className="p-6 bg-gradient-to-br from-zinc-100 to-white dark:from-zinc-900 dark:to-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                   <Users className="w-16 h-16 text-sky-600 transform rotate-12" />
-                </div>
-                <span className="block text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-indigo-600 mb-2">
-                  10+
-                </span>
-                <span className="text-sm font-bold uppercase tracking-wider text-zinc-900 dark:text-white block mb-1">
-                  Years of
-                </span>
-                <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400 leading-tight block">
-                  Client Satisfaction & <br/>Digital Transformation
-                </span>
+              {/* Metrics Stack */}
+              <div className="grid grid-cols-2 md:grid-cols-1 gap-4">
+                  
+                  {/* Companies Supported */}
+                  <div className="p-5 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 relative overflow-hidden group hover:border-sky-500/30 transition-all">
+                    <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <Building2 className="w-24 h-24 text-zinc-900 dark:text-white" />
+                    </div>
+                    <span className="block text-3xl md:text-4xl font-serif font-bold text-zinc-900 dark:text-white mb-1">
+                      100+
+                    </span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                      Companies <br/>Supported
+                    </span>
+                  </div>
+
+                  {/* Professionals Trained */}
+                  <div className="p-5 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800 relative overflow-hidden group hover:border-sky-500/30 transition-all">
+                    <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <GraduationCap className="w-24 h-24 text-zinc-900 dark:text-white" />
+                    </div>
+                    <span className="block text-3xl md:text-4xl font-serif font-bold text-zinc-900 dark:text-white mb-1">
+                      500+
+                    </span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                      Professionals <br/>Trained
+                    </span>
+                  </div>
+
               </div>
+
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed hidden md:block">
+                 Refining workflows and driving digital adoption across the AEC industry.
+              </p>
             </div>
           </FadeIn>
         </div>

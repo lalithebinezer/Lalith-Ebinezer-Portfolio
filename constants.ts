@@ -1,4 +1,3 @@
-
 import { Profile, Job, Education, SkillCategory, Project } from './types';
 
 export const PROFILE: Profile = {
@@ -13,8 +12,8 @@ export const PROFILE: Profile = {
     address: "#206 Radha Govinda Residency, Tirupati 51701 (Home Base)"
   },
   summary: [
-    "Driving Digital Transformation in Saudi Construction with Autodesk & GBS.",
-    "Helping engineering and construction companies across Saudi Arabia unlock the full potential of Autodesk’s world-class solutions. From AutoCAD to the AEC Collection and BIM Collaborate Pro, delivering the tools and expertise needed to design, build, and manage projects efficiently.",
+    "Driving Digital Transformation with Common Data Environments (CDE) & Construction Cloud Platforms.",
+    "Specializing in the implementation of Common Data Environments (CDE) and Construction Cloud platforms. I have trained over 500+ professionals and supported 100+ companies in refining their digital delivery workflows, helping firms unlock the full potential of Autodesk solutions.",
     "Mission: Streamline workflows, accelerate project delivery, and empower teams with cutting-edge technology and skilled resources to shape the future of construction in the Kingdom."
   ]
 };
