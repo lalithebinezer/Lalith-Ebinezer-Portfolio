@@ -12,8 +12,8 @@ export const PROFILE: Profile = {
     address: "#206 Radha Govinda Residency, Tirupati 51701 (Home Base)"
   },
   summary: [
-    "Driving Digital Transformation with Common Data Environments (CDE) & Construction Cloud Platforms.",
-    "Specializing in the implementation of Common Data Environments (CDE) and Construction Cloud platforms. I have trained over 500+ professionals and supported 100+ companies in refining their digital delivery workflows, helping firms unlock the full potential of Autodesk solutions.",
+    "Specialized in driving digital transformation across the Saudi construction sector in partnership with Autodesk and Gulf Business Solutions (GBS).",
+    "My expertise focuses on Autodesk Platform Services, advanced BIM implementation strategies, and establishing robust Common Data Environments (CDE) using Construction Cloud platforms.",
     "Mission: Streamline workflows, accelerate project delivery, and empower teams with cutting-edge technology and skilled resources to shape the future of construction in the Kingdom."
   ]
 };

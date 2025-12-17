@@ -59,7 +59,7 @@ const Hero: React.FC = () => {
 
             <div className={`max-w-md transition-all duration-1000 ease-out-expo delay-500 ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <p className="text-zinc-600 dark:text-zinc-400 text-base md:text-lg leading-relaxed">
-                {PROFILE.summary[0]} Specialized in <span className="text-zinc-900 dark:text-white font-semibold">Common Data Environment (CDE)</span> implementation and <span className="text-zinc-900 dark:text-white font-semibold">Construction Cloud</span> platforms.
+                {PROFILE.summary[0]} My expertise focuses on <span className="text-zinc-900 dark:text-white font-semibold">Autodesk Platform Services</span> and establishing robust <span className="text-zinc-900 dark:text-white font-semibold">CDE</span> platforms.
               </p>
             </div>
             
