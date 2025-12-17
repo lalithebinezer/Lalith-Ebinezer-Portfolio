@@ -27,11 +27,11 @@ export const EXPERIENCE: Job[] = [
         title: "Business Development Manager – Autodesk",
         period: "Feb 2025 - Present",
         description: [
-          "Lead pre-sales technical demonstrations and deliver compelling solution presentations for the Autodesk Construction Cloud (ACC).",
-          "Manage the complete client lifecycle by delivering expert implementation, customized training, and dedicated support to AEC clients.",
-          "Collaborate with sales to develop persuasive technical proposals and PoCs to secure new business.",
-          "Oversee customer onboarding to ensure smooth transition and high adoption rates for Autodesk ACC & AEC solutions.",
-          "Cultivate strategic partnerships with Autodesk to drive mutual growth and business objectives."
+          "Key Account Leadership: Manage complex sales cycles and coordinating with diverse technology vendors to deliver comprehensive, multi-disciplinary solutions.",
+          "Consultative Solution Selling: Employ a consultative approach to diagnose unique client challenges, delivering tailored outcomes that drive tangible ROI and operational efficiency.",
+          "Digital Transformation Strategy: Guide clients through digital maturity journeys, leveraging deep expertise in Autodesk Construction Solutions, AI, and ISO 19650 standards.",
+          "Emerging Tech Integration: Pioneer the implementation of Industry 4.0 technologies including AR/VR, Metaverse, and Laser Scanning into practical AEC workflows.",
+          "End-to-End Lifecycle Support: Provide full-spectrum client support from opportunity assessment and technical Proof of Concepts (POC) to implementation and comprehensive training."
         ]
       }
     ]

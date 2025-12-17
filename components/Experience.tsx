@@ -102,12 +102,22 @@ const Experience: React.FC = () => {
                       </div>
                       
                       <ul className="space-y-2">
-                        {role.description.map((point, idx) => (
-                          <li key={idx} className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed relative pl-4">
-                            <span className="absolute left-0 top-1.5 w-1.5 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full"></span>
-                            {point}
-                          </li>
-                        ))}
+                        {role.description.map((point, idx) => {
+                          const colIndex = point.indexOf(':');
+                          const isLabeled = colIndex > -1 && colIndex < 50; // Check if it starts with a label pattern
+                          
+                          return (
+                            <li key={idx} className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed relative pl-4">
+                              <span className="absolute left-0 top-1.5 w-1.5 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full"></span>
+                              {isLabeled ? (
+                                <span>
+                                  <span className="font-bold text-zinc-900 dark:text-zinc-100">{point.substring(0, colIndex + 1)}</span>
+                                  {point.substring(colIndex + 1)}
+                                </span>
+                              ) : point}
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   ))}
