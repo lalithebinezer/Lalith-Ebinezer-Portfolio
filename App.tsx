@@ -4,11 +4,12 @@ import Hero from './components/Hero';
 import Experience from './components/Experience';
 import Projects from './components/Projects';
 import Skills from './components/Skills';
+import Education from './components/Education';
+import Contact from './components/Contact';
 import Footer from './components/Footer';
 import LiquidBackground from './components/LiquidBackground';
-import CustomCursor from './components/CustomCursor';
 
-const App: React.FC = () => {
+export default function App() {
   useEffect(() => {
     // Security: Disable Right Click
     const handleContextMenu = (e: MouseEvent) => {
@@ -51,20 +52,19 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen text-zinc-900 dark:text-zinc-200 relative transition-colors duration-300">
-      <CustomCursor />
       <LiquidBackground />
       <Navigation />
       
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 space-y-16 md:space-y-32 relative z-10 mb-12 md:mb-20">
+      <main className="max-w-6xl mx-auto px-5 sm:px-8 space-y-24 md:space-y-32 relative z-10 mb-16 md:mb-24">
         <Hero />
+        <Education />
         <Experience />
         <Projects />
         <Skills />
+        <Contact />
       </main>
 
       <Footer />
     </div>
   );
-};
-
-export default App;
+}

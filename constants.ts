@@ -162,46 +162,46 @@ export const EDUCATION: Education[] = [
 
 export const SKILLS: SkillCategory[] = [
   {
-    title: "Top Skills",
+    title: "BIM & Construction Cloud",
     skills: [
-      "Industrialized Construction Strategy",
-      "Software Infrastructure",
-      "Application Engineering",
-      "BIM Implementation",
-      "Digital Transformation"
-    ]
-  },
-  {
-    title: "Technical",
-    skills: [
-      "AutoCAD",
       "Autodesk Construction Cloud (ACC)",
+      "Revit & AutoCAD",
+      "Navisworks",
+      "Autodesk Tandem",
       "BIM Collaborate Pro",
-      "Revit Automation",
-      "Microsoft Power BI Integration",
-      "Autodesk Platform Services (APS)",
-      "PlanGrid",
-      "Autodesk Build"
+      "Autodesk Build",
+      "PlanGrid"
     ]
   },
   {
-    title: "Languages",
+    title: "Development & Automation",
     skills: [
-      "English (Professional Working)",
-      "Hindi (Professional Working)",
-      "Telugu (Native or Bilingual)"
+      "Autodesk Platform Services (APS)",
+      "Dynamo Visual Scripting",
+      "Revit Automation",
+      "AutoLISP",
+      "Microsoft Power BI Integration"
+    ]
+  },
+  {
+    title: "Visualization & Simulation",
+    skills: [
+      "Unreal Engine 5",
+      "Twinmotion",
+      "3ds Max & Blender",
+      "MetaHuman Creation",
+      "4D Construction Simulation",
+      "ArchViz & Graphic Design"
     ]
   },
   {
     title: "Certifications",
     skills: [
-      "Autodesk Certified Professional: Revit Architecture 2014",
+      "Autodesk Certified Professional: Revit",
       "Autodesk Pre-construction: Design & Planning",
       "Autodesk Site Construction & Operations",
       "Project Administration",
-      "Certified Professional AutoCAD 2014",
-      "Issues in Docs",
-      "Packages"
+      "Certified Professional AutoCAD"
     ]
   }
 ];
